@@ -1,4 +1,4 @@
-# Film Society Movie API
+Film Society Movie API
 
 A robust REST API for managing a movie database, built with Spring Boot and SQLite. This application was created to help the local film society digitize their records of movies, actors, and genres.
 
@@ -26,13 +26,16 @@ A robust REST API for managing a movie database, built with Spring Boot and SQLi
 ### Steps
 1. Clone the repository:
    git clone https://gitea.kood.tech/mihhailzujev/movie-api.git
+
    cd movie-api
 
 2. Run the application:
    Windows:
+   mvn clean install
    .\mvnw spring-boot:run
 
    Mac/Linux:
+   mvn clean install
    ./mvnw spring-boot:run
 
 3. Access the API:
