@@ -1,6 +1,6 @@
 Film Society Movie API
 
-A robust REST API for managing a movie database, built with Spring Boot and SQLite. This application was created to help the local film society digitize their records of movies, actors, and genres.
+A robust REST API for managing a movie database, built with Spring Boot and SQLite. 
 
 ## Features
 
@@ -10,18 +10,16 @@ A robust REST API for managing a movie database, built with Spring Boot and SQLi
 - Pagination: Handles large lists of movies efficiently using page and size parameters.
 - Auto-Data Loading: Automatically imports sample data from CSV files on startup if the database is empty.
 
-## Technologies Used
+## Software you need
 
-- Java 17
+- Java 17 (downgrade if you have 21 or 25)
 - Spring Boot 3 (Web, Data JPA, Validation)
 - SQLite (Database)
 - Maven (Build Tool)
+- Git
 
 ## How to Run
 
-### Prerequisites
-- Java 17 or newer installed.
-- Git installed.
 
 ### Steps
 1. Clone the repository:
@@ -32,11 +30,11 @@ A robust REST API for managing a movie database, built with Spring Boot and SQLi
 2. Run the application:
    Windows:
    mvn clean install
-   .\mvnw spring-boot:run
+   mvn spring-boot:run
 
    Mac/Linux:
    mvn clean install
-   ./mvnw spring-boot:run
+   mvn spring-boot:run
 
 3. Access the API:
    The server will start on http://localhost:8080
@@ -52,6 +50,7 @@ A robust REST API for managing a movie database, built with Spring Boot and SQLi
 
 ### Actors
 - Get All: GET /api/actors
+- Find Actor by name (case insensitive): http://localhost:8080/api/actors?name=
 - Create Actor: POST /api/actors
 - Delete Actor: DELETE /api/actors/{id}?force=true (Use force=true if they have movies)
 
@@ -67,6 +66,3 @@ A robust REST API for managing a movie database, built with Spring Boot and SQLi
 - src/main/java/.../controller: API endpoints.
 - src/main/resources/data: CSV files for initial data loading.
 
-## Testing
-
-You can test the API using Postman. Import the collection or simply send requests to http://localhost:8080/api/...
