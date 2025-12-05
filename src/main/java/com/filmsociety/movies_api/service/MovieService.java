@@ -1,21 +1,21 @@
 package com.filmsociety.movies_api.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.filmsociety.movies_api.entity.Actor;
-import com.filmsociety.movies_api.entity.Genre;
 import com.filmsociety.movies_api.entity.Movie;
 import com.filmsociety.movies_api.exception.ResourceNotFoundException;
 import com.filmsociety.movies_api.repository.ActorRepository;
 import com.filmsociety.movies_api.repository.GenreRepository;
 import com.filmsociety.movies_api.repository.MovieRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class MovieService {
@@ -82,6 +82,34 @@ public class MovieService {
             movie.setActors(movieDetails.getActors());
         }
 
+        return movieRepository.save(movie);
+    }
+
+    @Transactional
+    public Movie addActorsToMovie(Long movieId, Set<Actor> newActors) {
+        // 1. Retrieve the existing Movie. This will throw ResourceNotFoundException if ID is bad.
+        Movie movie = getMovieById(movieId);
+
+        // 2. Retrieve existing actors and merge the new ones.
+        Set<Actor> existingActors = movie.getActors();
+        
+        // Ensure new actors are fully managed entities by retrieving them from the DB
+        // If an actor is not found, the process will fail gracefully with a 404 error (ResourceNotFoundException).
+        Set<Actor> actorsToMerge = new HashSet<>();
+        for (Actor actor : newActors) {
+            if (actor.getId() != null) {
+                // Look up the actor by ID to ensure it's a persistent entity
+                Actor foundActor = actorRepository.findById(actor.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Actor not found with id: " + actor.getId()));
+                actorsToMerge.add(foundActor);
+            }
+        }
+
+        // 3. Merge the lists (Set.addAll handles duplicates automatically)
+        existingActors.addAll(actorsToMerge);
+        
+        // 4. Update the movie's actor list and save
+        movie.setActors(existingActors);
         return movieRepository.save(movie);
     }
 

@@ -39,24 +39,50 @@ A robust REST API for managing a movie database, built with Spring Boot and SQLi
 3. Access the API:
    The server will start on http://localhost:8080
 
+
+## Collections
+
+Open Postman, find "Import" button. 
+Import file named "MZ_movie_db_postman_collection.json". 
+
+
 ## API Endpoints
 
-### Movies
-- Get All (Paginated): GET /api/movies?page=0&size=10
-- Filter by Genre: GET /api/movies?genre=1
-- Search by Title: GET /api/movies/search?title=Matrix
-- Create Movie: POST /api/movies
-- Delete Movie: DELETE /api/movies/{id}
+The base URL for all requests is http://localhost:8080.
 
-### Actors
+### MOVIES (BASE PATH: /api/movies)
+
+- Get All (Paginated): GET /api/movies?page={PAGE}&size={SIZE}
+- Filter by Genre: GET /api/movies?genre={ID}
+- Search by Title: GET /api/movies/search?title={TITLE}
+
+- Add New Movie: POST /api/movies
+  * Requires JSON body: {"title": "Film Title", "releaseYear": 2024, "genres": [ {"id": 1} ], "actors": [ {"id": 5} ]}
+
+- Delete Movie: DELETE /api/movies/{ID}
+
+### ACTORS (BASE PATH: /api/actors)
+
 - Get All: GET /api/actors
-- Find Actor by name (case insensitive): http://localhost:8080/api/actors?name=
+- Find by Name (case insensitive): GET /api/actors?name={NAME}
 - Create Actor: POST /api/actors
-- Delete Actor: DELETE /api/actors/{id}?force=true (Use force=true if they have movies)
+  * Requires JSON body: {"name": "New Actor", "birthDate": "1990-01-01"}
 
-### Genres
+- Update Name/Date: PATCH /api/actors/{ID}
+  * Requires JSON body: {"birthDate": "1995-12-25"}
+
+- Update Movies (Replace All): PATCH /api/actors/{ID}
+  * Requires JSON body: {"movies": [ {"id": 1}, {"id": 3} ]}
+
+- Delete Actor (Forced): DELETE /api/actors/{ID}?force=true
+
+### GENRES (BASE PATH: /api/genres)
+
 - Get All: GET /api/genres
 - Create Genre: POST /api/genres
+  * Requires JSON body: {"name": "Western"}
+
+- Delete Genre: DELETE /api/genres/{ID}
 
 ## Project Structure
 

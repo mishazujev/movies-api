@@ -1,0 +1,367 @@
+{
+  "info": {
+    "name": "MZ Movie API",
+    "description": "Complete API collection for Movie Database with movies, actors, and genres management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "Get All Movies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/movies?page=0&size=20",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "movies"],
+              "query": [
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "20"},
+                {"key": "genre", "value": "1", "disabled": true},
+                {"key": "year", "value": "2010", "disabled": true},
+                {"key": "actor", "value": "1", "disabled": true},
+                {"key": "title", "value": "inception", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Movie by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/movies/1"
+          }
+        },
+        {
+          "name": "Search Movies by Title",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/movies/search?title=dark&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "movies", "search"],
+              "query": [
+                {"key": "title", "value": "dark"},
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Actors by Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/movies/1/actors?page=0&size=20",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "movies", "1", "actors"],
+              "query": [
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "20"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Movie",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"The Matrix\",\n  \"releaseYear\": 1999,\n  \"duration\": 136,\n  \"actors\": [1, 2],\n  \"genres\": [1, 3]\n}"
+            },
+            "url": "http://localhost:8080/api/movies"
+          }
+        },
+        {
+          "name": "Update Movie (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"addActorIds\": [3],\n  \"removeActorIds\": [1],\n  \"addGenreIds\": [2],\n  \"removeGenreIds\": []\n}"
+            },
+            "url": "http://localhost:8080/api/movies/1"
+          }
+        },
+        {
+          "name": "Delete Movie (Safe)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "http://localhost:8080/api/movies/1"
+          }
+        },
+        {
+          "name": "Delete Movie (Force)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/movies/1?force=true",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "movies", "1"],
+              "query": [{"key": "force", "value": "true"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Actors",
+      "item": [
+        {
+          "name": "Get All Actors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/actors?page=0&size=20",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "actors"],
+              "query": [
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "20"},
+                {"key": "name", "value": "dicaprio", "disabled": true}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Actor by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/actors/1"
+          }
+        },
+        {
+          "name": "Search Actors by Name",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/actors/search?name=tom&page=0&size=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "actors", "search"],
+              "query": [
+                {"key": "name", "value": "tom"},
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "10"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Movies by Actor",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/actors/1/movies?page=0&size=20",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "actors", "1", "movies"],
+              "query": [
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "20"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Actor",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Keanu Reeves\",\n  \"birthDate\": \"1964-09-02\"\n}"
+            },
+            "url": "http://localhost:8080/api/actors"
+          }
+        },
+        {
+          "name": "Update Actor (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\",\n  \"birthDate\": \"1980-01-15\",\n  \"addMovieIds\": [1],\n  \"removeMovieIds\": [2]\n}"
+            },
+            "url": "http://localhost:8080/api/actors/1"
+          }
+        },
+        {
+          "name": "Delete Actor (Safe)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "http://localhost:8080/api/actors/1"
+          }
+        },
+        {
+          "name": "Delete Actor (Force)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/actors/1?force=true",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "actors", "1"],
+              "query": [{"key": "force", "value": "true"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "Get All Genres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/genres?page=0&size=20",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "genres"],
+              "query": [
+                {"key": "page", "value": "0"},
+                {"key": "size", "value": "20"}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Genre by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/genres/1"
+          }
+        },
+        {
+          "name": "Create Genre",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Documentary\"\n}"
+            },
+            "url": "http://localhost:8080/api/genres"
+          }
+        },
+        {
+          "name": "Update Genre (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Genre Name\"\n}"
+            },
+            "url": "http://localhost:8080/api/genres/1"
+          }
+        },
+        {
+          "name": "Delete Genre (Safe)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "http://localhost:8080/api/genres/1"
+          }
+        },
+        {
+          "name": "Delete Genre (Force)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/genres/1?force=true",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "genres", "1"],
+              "query": [{"key": "force", "value": "true"}]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error Scenarios",
+      "item": [
+        {
+          "name": "404 - Get Non-Existent Movie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "http://localhost:8080/api/movies/99999"
+          }
+        },
+        {
+          "name": "400 - Invalid Movie Data (Null Title)",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": null,\n  \"releaseYear\": 2020,\n  \"duration\": 120,\n  \"actors\": [1],\n  \"genres\": [1]\n}"
+            },
+            "url": "http://localhost:8080/api/movies"
+          }
+        },
+        {
+          "name": "400 - Invalid Release Year",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Movie\",\n  \"releaseYear\": 1800,\n  \"duration\": 120,\n  \"actors\": [1],\n  \"genres\": [1]\n}"
+            },
+            "url": "http://localhost:8080/api/movies"
+          }
+        },
+        {
+          "name": "400 - Delete with Relationships (Safe)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "http://localhost:8080/api/actors/1"
+          }
+        }
+      ]
+    }
+  ]
+}

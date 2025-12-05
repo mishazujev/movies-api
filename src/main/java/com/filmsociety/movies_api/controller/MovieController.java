@@ -1,16 +1,29 @@
 package com.filmsociety.movies_api.controller;
 
-import com.filmsociety.movies_api.entity.Actor;
-import com.filmsociety.movies_api.entity.Movie;
-import com.filmsociety.movies_api.service.MovieService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
-
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.filmsociety.movies_api.entity.Actor;
+import com.filmsociety.movies_api.entity.Genre;
+import com.filmsociety.movies_api.entity.Movie;
+import com.filmsociety.movies_api.service.MovieService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/movies")
@@ -58,6 +71,49 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getMovieById(id).getActors());
     }
 
+    @GetMapping("/export/csv")
+    public ResponseEntity<String> exportMoviesToCsv() {
+        // 1. Get all movies (ignoring pagination for the full export)
+        List<Movie> movies = movieService.getAllMovies(0, Integer.MAX_VALUE).getContent();
+
+        // 2. Build the CSV content string
+        StringBuilder csvContent = new StringBuilder();
+        
+        // Add Header Row
+        csvContent.append("ID,Title,ReleaseYear,Duration,Genres,Actors\n");
+
+        // Add Data Rows
+        for (Movie movie : movies) {
+            // Get pipe-separated lists of names for relationships
+            String genreNames = movie.getGenres().stream()
+                    .map(Genre::getName)
+                    .collect(java.util.stream.Collectors.joining("|"));
+
+            String actorNames = movie.getActors().stream()
+                    .map(Actor::getName)
+                    .collect(java.util.stream.Collectors.joining("|"));
+
+            // Append movie data
+            csvContent.append(String.format("%d,\"%s\",%d,%d,\"%s\",\"%s\"\n", 
+                    movie.getId(), 
+                    movie.getTitle().replace("\"", "\"\""), // Handle embedded quotes
+                    movie.getReleaseYear(), 
+                    movie.getDuration(), 
+                    genreNames, 
+                    actorNames));
+        }
+
+        // 3. Set HTTP Headers for file download
+        HttpHeaders headers = new HttpHeaders();
+        // This tells the browser/client to download a file
+        headers.setContentDispositionFormData("attachment", "movies_data.csv");
+        // This tells the browser/client the file type
+        headers.setContentType(MediaType.parseMediaType("text/csv"));
+
+        // 4. Return the content as a ResponseEntity
+        return new ResponseEntity<>(csvContent.toString(), headers, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Movie> createMovie(@Valid @RequestBody Movie movie) {
         return new ResponseEntity<>(movieService.createMovie(movie), HttpStatus.CREATED);
@@ -66,6 +122,15 @@ public class MovieController {
     @PatchMapping("/{id}")
     public ResponseEntity<Movie> updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
         return ResponseEntity.ok(movieService.updateMovie(id, movie));
+    }
+
+    // Inside MovieController.java
+
+    @PatchMapping("/{movieId}/actors/add")
+    public ResponseEntity<Movie> addActorsToMovie(@PathVariable Long movieId, @RequestBody Set<Actor> newActors) {
+        // This endpoint expects a set of Actor objects (with IDs) and adds them to the movie's existing cast.
+        Movie updatedMovie = movieService.addActorsToMovie(movieId, newActors);
+        return ResponseEntity.ok(updatedMovie);
     }
 
     @DeleteMapping("/{id}")
